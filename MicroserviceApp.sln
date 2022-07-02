@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroserviceApp.PlatformService", "src\MicroserviceApp.PlatformService\MicroserviceApp.PlatformService.csproj", "{52CCBE88-B20C-455D-8970-99BDDD30BE8C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroserviceApp.CommandsService", "src\MicroserviceApp.CommandsService\MicroserviceApp.CommandsService.csproj", "{9A059F18-9131-46EB-AA8B-D4430BF63832}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{52CCBE88-B20C-455D-8970-99BDDD30BE8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52CCBE88-B20C-455D-8970-99BDDD30BE8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52CCBE88-B20C-455D-8970-99BDDD30BE8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A059F18-9131-46EB-AA8B-D4430BF63832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A059F18-9131-46EB-AA8B-D4430BF63832}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A059F18-9131-46EB-AA8B-D4430BF63832}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A059F18-9131-46EB-AA8B-D4430BF63832}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
