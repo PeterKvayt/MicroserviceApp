@@ -1,0 +1,12 @@
+charts:
+  ingress:
+    hostName: microapp.com
+
+global:
+  platforms:
+    clusterIp:
+      name: platforms-clusterip-srv
+      
+  commands:
+    clusterIp:
+      name: commands-clusterip-srv

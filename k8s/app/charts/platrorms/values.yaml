@@ -2,6 +2,6 @@ deployment:
   image: peterkvayt/platformservice:latest
   name: platforms-depl
   appName: platformservice
-  
-clusterIp:
-  name: platforms-clusterip-srv
+#
+#clusterIp:
+#  name: platforms-clusterip-srv
