@@ -1,5 +1,6 @@
 using System;
 using MicroserviceApp.PlatformService.Data;
+using MicroserviceApp.PlatformService.SyncDataServices.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ namespace MicroserviceApp.PlatformService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMem"));
-
+            services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
             services.AddScoped<IPlatformRepo, PlatformRepo>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
@@ -41,6 +42,8 @@ namespace MicroserviceApp.PlatformService
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
+            Console.WriteLine($"--> Environment is {env.EnvironmentName}");
+            
             PrepDb.PrepPopulation(app);
         }
     }

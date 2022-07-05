@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using MicroserviceApp.PlatformService.Data;
 using MicroserviceApp.PlatformService.Dtos;
 using MicroserviceApp.PlatformService.Models;
+using MicroserviceApp.PlatformService.SyncDataServices.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroserviceApp.PlatformService.Controllers
@@ -41,7 +43,7 @@ namespace MicroserviceApp.PlatformService.Controllers
         }
 
         [HttpPost]
-        public ActionResult<PlatformReadDto> CreatePlatform(PlatformCreateDto platform)
+        public async Task<ActionResult<PlatformReadDto>> CreatePlatform(PlatformCreateDto platform, [FromServices] ICommandDataClient commandDataClient)
         {
             var model = _mapper.Map<Platform>(platform);
             _platformRepo.Create(model);
@@ -49,6 +51,15 @@ namespace MicroserviceApp.PlatformService.Controllers
 
             var platformResponse = _mapper.Map<PlatformReadDto>(model);
 
+            try
+            {
+                await commandDataClient.SendPlatformToCommand(platformResponse);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"--> Could not send sync: {e.Message}");
+            }
+            
             return CreatedAtRoute(nameof(GetPlatformById), new {Id = platformResponse.Id}, platformResponse);
         }
     }
