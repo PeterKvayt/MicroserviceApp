@@ -1,6 +1,6 @@
 apiVersion: v2
-name: platforms-service
-description: A Helm chart for platforms-service
+name: platforms
+description: A Helm chart for platforms service
 
 # A chart can be either an 'application' or a 'library' chart.
 #

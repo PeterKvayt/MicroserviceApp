@@ -1,0 +1,8 @@
+deployment:
+  image: peterkvayt/commandservice:latest
+  name: commands-depl
+  appName: commandservice
+  
+clusterIp:
+  name: commands-clusterip-srv
+  
