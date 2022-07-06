@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployment.appName }}
+    spec:
+      containers:
+        - name: {{ .Values.deployment.appName }}
+          image: {{ .Values.deployment.image }}
+          ports:
+            - containerPort: 1433
+          env:
+            - name: MSSQL_PID
+              value: "Express"
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mssql # from kubectl secret name
+                  key: SA_PASSWORD # from kubectl secret name
+          volumeMounts:
+            - mountPath: /var/opt/mssql/data # folder inside container
+              name: {{ .Values.deployment.volume }} # where folder actually stored via volume
+      volumes:
+        - name: {{ .Values.deployment.volume }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvc.name }}

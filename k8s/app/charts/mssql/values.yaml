@@ -1,0 +1,14 @@
+deployment:
+  image: mcr.microsoft.com/mssql/server:2017-latest
+  name: mssql-depl
+  appName: mssql
+  volume: mssqldb
+  
+pvc:
+  name: mssql-claim
+  
+loadbalancer:
+  name: mssql-loadbalancer
+    
+clusterip:
+  name: mssql-clusterip-srv
