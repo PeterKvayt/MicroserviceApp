@@ -4,6 +4,7 @@ using MicroserviceApp.PlatformService.SyncDataServices.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
@@ -12,12 +13,35 @@ namespace MicroserviceApp.PlatformService
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        {
+            _configuration = configuration;
+            _env = env;
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMem"));
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                if (_env.IsProduction())
+                {
+                    Console.WriteLine($"--> Using SQL DB");
+                    options.UseSqlServer(_configuration.GetConnectionString("PlatformsConn"));
+                }
+                else
+                {
+                    Console.WriteLine($"--> Using InMem DB");
+                    options.UseInMemoryDatabase("InMem");
+                }
+            });
+            
             services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
             services.AddScoped<IPlatformRepo, PlatformRepo>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -25,9 +49,9 @@ namespace MicroserviceApp.PlatformService
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
@@ -42,9 +66,10 @@ namespace MicroserviceApp.PlatformService
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
-            Console.WriteLine($"--> Environment is {env.EnvironmentName}");
+            Console.WriteLine($"--> Environment is {_env.EnvironmentName}");
+            Console.WriteLine($"--> CommandService url is {_configuration["CommandService"]}");
             
-            PrepDb.PrepPopulation(app);
+            PrepDb.PrepPopulation(app, _env);
         }
     }
 }

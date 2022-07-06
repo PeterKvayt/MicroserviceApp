@@ -18,5 +18,3 @@ spec:
       containers:
         - name: {{ .Values.deployment.appName }}
           image: {{ .Values.deployment.image }}
-  
-

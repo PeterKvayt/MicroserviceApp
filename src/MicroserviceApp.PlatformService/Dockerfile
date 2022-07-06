@@ -1,3 +1,8 @@
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS base-stage
+RUN apk add --no-cache icu-libs # Install cultures for alpine.
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT 0 # 0 - access to cultural data; 1 - run in invariant mode. In docker alpine default value is 1.
+WORKDIR /app
+
 FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build-stage
 WORKDIR /app
 
@@ -7,7 +12,6 @@ RUN dotnet restore --no-cache
 COPY . ./
 RUN dotnet publish -c Release -o out
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS final-stage
-WORKDIR /app
+FROM base-stage AS final-stage
 COPY --from=build-stage /app/out .
 ENTRYPOINT ["dotnet", "MicroserviceApp.PlatformService.dll"]
