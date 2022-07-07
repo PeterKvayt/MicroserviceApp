@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using MicroserviceApp.PlatformService.AsyncDataServices;
 using MicroserviceApp.PlatformService.Data;
 using MicroserviceApp.PlatformService.Dtos;
 using MicroserviceApp.PlatformService.Models;
@@ -43,7 +44,7 @@ namespace MicroserviceApp.PlatformService.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PlatformReadDto>> CreatePlatform(PlatformCreateDto platform, [FromServices] ICommandDataClient commandDataClient)
+        public async Task<ActionResult<PlatformReadDto>> CreatePlatform(PlatformCreateDto platform, [FromServices] ICommandDataClient commandDataClient, [FromServices] IMessageBusClient messageBusClient)
         {
             var model = _mapper.Map<Platform>(platform);
             _platformRepo.Create(model);
@@ -51,6 +52,7 @@ namespace MicroserviceApp.PlatformService.Controllers
 
             var platformResponse = _mapper.Map<PlatformReadDto>(model);
 
+            // Send sync message
             try
             {
                 await commandDataClient.SendPlatformToCommand(platformResponse);
@@ -58,6 +60,18 @@ namespace MicroserviceApp.PlatformService.Controllers
             catch (Exception e)
             {
                 Console.WriteLine($"--> Could not send sync: {e.Message}");
+            }
+            
+            //Send async message
+            try
+            {
+                var platformPublishedDto = _mapper.Map<PlatformPublishedDto>(platformResponse);
+                platformPublishedDto.Event = "Platform_Published";
+                messageBusClient.PublishNewPlatform(platformPublishedDto);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"--> Could not send async: {e.Message}");
             }
             
             return CreatedAtRoute(nameof(GetPlatformById), new {Id = platformResponse.Id}, platformResponse);

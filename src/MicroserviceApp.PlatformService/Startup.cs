@@ -1,4 +1,5 @@
 using System;
+using MicroserviceApp.PlatformService.AsyncDataServices;
 using MicroserviceApp.PlatformService.Data;
 using MicroserviceApp.PlatformService.SyncDataServices.Http;
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +40,8 @@ namespace MicroserviceApp.PlatformService
             });
             
             services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
+            services.AddSingleton<IMessageBusClient, MessageBusClient>();
+
             services.AddScoped<IPlatformRepo, PlatformRepo>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             
