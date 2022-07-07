@@ -1,0 +1,13 @@
+deployment:
+  image: rabbitmq:3-management
+  name: rabbitmq-depl
+  appName: rabbitmq
+  ports:
+    managment: rbmq-mgmt-port
+    message: rbmq-msg-port
+
+loadbalancer:
+  name: rabbitmq-loadbalancer
+
+clusterip:
+  name: rabbitmq-clusterip-srv

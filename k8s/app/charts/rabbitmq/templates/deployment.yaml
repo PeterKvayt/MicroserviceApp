@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+  labels:
+    app: {{ .Values.deployment.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.appName }}
+  template:
+    metadata:
+      name: {{ .Values.deployment.name }}
+      labels:
+        app: {{ .Values.deployment.appName }}
+    spec:
+      containers:
+        - name: {{ .Values.deployment.appName }}
+          image: {{ .Values.deployment.image }}
+          ports:
+            - containerPort: 15672
+              name: {{ .Values.deployment.ports.managment }}
+            - containerPort: 5672
+              name: {{ .Values.deployment.ports.message }}
