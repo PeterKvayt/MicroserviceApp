@@ -11,5 +11,8 @@ public class CommandsProfile : Profile
         CreateMap<Platform, PlatformReadDto>();
         CreateMap<CommandCreateDto, Command>();
         CreateMap<Command, CommandReadDto>();
+        CreateMap<PlatformPublishedDto, Platform>()
+            .ForMember(target => target.ExternalId, opt => opt.MapFrom(src => src.Id))
+            ;
     }
 }
