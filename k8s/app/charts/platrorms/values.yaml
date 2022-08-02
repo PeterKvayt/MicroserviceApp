@@ -2,3 +2,7 @@ deployment:
   image: peterkvayt/platformservice:latest
   name: platforms-depl
   appName: platformservice
+  ports:
+    grpc: 
+      name: platforms-grpc-port
+      value: 888

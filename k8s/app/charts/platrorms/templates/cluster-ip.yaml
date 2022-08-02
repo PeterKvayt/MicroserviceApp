@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: {{ .Values.global.platforms.clusterIp.name }}
 spec:
+  type: ClusterIP
   selector:
     app: {{ .Values.deployment.appName }}
   ports:
@@ -10,4 +11,7 @@ spec:
       protocol: TCP
       port: {{ .Values.global.platforms.clusterIp.port }}
       targetPort: 80
-  type: ClusterIP
+    - name: {{ .Values.deployment.ports.grpc.name }}
+      protocol: TCP
+      port: {{ .Values.deployment.ports.grpc.value }}
+      targetPort: {{ .Values.deployment.ports.grpc.value }}
