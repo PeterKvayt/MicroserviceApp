@@ -6,7 +6,14 @@ global:
   platforms:
     clusterIp:
       name: platforms-clusterip-srv
+      port: 80
       
   commands:
     clusterIp:
       name: commands-clusterip-srv
+      port: 80
+      
+  mq:
+    clusterIp:
+      name: rbmq-clusterip-srv
+      port: 15672
