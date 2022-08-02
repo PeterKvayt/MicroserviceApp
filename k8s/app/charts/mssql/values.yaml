@@ -3,12 +3,13 @@ deployment:
   name: mssql-depl
   appName: mssql
   volume: mssqldb
+  portName: mssql-port
   
 pvc:
-  name: mssql-claim
-  
-loadbalancer:
-  name: mssql-loadbalancer
+  name: mssql-pvc
     
-clusterip:
+nodePort:
+  name: mssql-np   
+
+clusterIp:
   name: mssql-clusterip-srv

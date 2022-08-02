@@ -20,6 +20,6 @@ spec:
           image: {{ .Values.deployment.image }}
           ports:
             - containerPort: 15672
-              name: {{ .Values.deployment.ports.managment }}
+              name: {{ .Values.deployment.ports.management }}
             - containerPort: 5672
               name: {{ .Values.deployment.ports.message }}

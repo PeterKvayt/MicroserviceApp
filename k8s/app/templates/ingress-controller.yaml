@@ -10,17 +10,27 @@ spec:
     - host: {{ .Values.charts.ingress.hostName }}
       http:
         paths:
-          - path: /api/platforms
+          - path: /api/platforms(/|$)(.*)
             pathType: Prefix
             backend:
               service:
                 name: {{ .Values.global.platforms.clusterIp.name }}
                 port:
-                  number: 80
+                  number: {{ .Values.global.platforms.clusterIp.port }}
           - path: /api/c/platforms
             pathType: Prefix
             backend:
               service:
                 name: {{ .Values.global.commands.clusterIp.name }}
                 port:
-                  number: 80
+                  number: {{ .Values.global.commands.clusterIp.port }}
+    - host: mq.{{ .Values.charts.ingress.hostName }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.global.mq.clusterIp.name }}
+                port:
+                  number: {{ .Values.global.mq.clusterIp.port }}

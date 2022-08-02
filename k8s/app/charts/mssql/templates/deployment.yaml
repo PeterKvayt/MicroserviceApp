@@ -17,6 +17,7 @@ spec:
           image: {{ .Values.deployment.image }}
           ports:
             - containerPort: 1433
+              name: {{ .Values.deployment.portName }}
           env:
             - name: MSSQL_PID
               value: "Express"

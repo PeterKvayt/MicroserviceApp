@@ -3,11 +3,5 @@ deployment:
   name: rabbitmq-depl
   appName: rabbitmq
   ports:
-    managment: rbmq-mgmt-port
+    management: rbmq-mgmt-port
     message: rbmq-msg-port
-
-loadbalancer:
-  name: rabbitmq-loadbalancer
-
-clusterip:
-  name: rabbitmq-clusterip-srv
