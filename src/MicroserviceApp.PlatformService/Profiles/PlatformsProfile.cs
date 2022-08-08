@@ -1,6 +1,7 @@
 using AutoMapper;
 using MicroserviceApp.PlatformService.Dtos;
 using MicroserviceApp.PlatformService.Models;
+using PlatformService;
 
 namespace MicroserviceApp.PlatformService.Profiles
 {
@@ -11,6 +12,10 @@ namespace MicroserviceApp.PlatformService.Profiles
             CreateMap<Platform, PlatformReadDto>();
             CreateMap<PlatformCreateDto, Platform>();
             CreateMap<PlatformReadDto, PlatformPublishedDto>();
+            CreateMap<Platform, GrpcPlatformModel>()
+                .ForMember(dest => dest.PlatformId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Publisher, opt => opt.MapFrom(src => src.Publisher));
         }
     }
 }

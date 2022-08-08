@@ -5,3 +5,6 @@ deployment:
   ports:
     management: rbmq-mgmt-port
     message: rbmq-msg-port
+    
+nodePort:
+  name: rbmq-np   

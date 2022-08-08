@@ -24,7 +24,7 @@ spec:
                 name: {{ .Values.global.commands.clusterIp.name }}
                 port:
                   number: {{ .Values.global.commands.clusterIp.port }}
-    - host: mq.{{ .Values.charts.ingress.hostName }}
+    - host: mq.client.{{ .Values.charts.ingress.hostName }}
       http:
         paths:
           - path: /

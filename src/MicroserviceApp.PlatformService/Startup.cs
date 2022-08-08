@@ -1,9 +1,12 @@
 using System;
+using System.IO;
 using MicroserviceApp.PlatformService.AsyncDataServices;
 using MicroserviceApp.PlatformService.Data;
+using MicroserviceApp.PlatformService.SyncDataServices.Grpc;
 using MicroserviceApp.PlatformService.SyncDataServices.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +41,8 @@ namespace MicroserviceApp.PlatformService
                     options.UseInMemoryDatabase("InMem");
                 }
             });
-            
+
+            services.AddGrpc();
             services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
             services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
@@ -67,7 +71,16 @@ namespace MicroserviceApp.PlatformService
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapGrpcService<GrpcPlatformService>();
+
+                endpoints.MapGet("/protos/platforms.proto", async context =>
+                {
+                    await context.Response.WriteAsync((File.ReadAllText("Protos/platforms.proto")));
+                });
+            });
 
             Console.WriteLine($"--> Environment is {_env.EnvironmentName}");
             Console.WriteLine($"--> CommandService url is {_configuration["CommandService"]}");
